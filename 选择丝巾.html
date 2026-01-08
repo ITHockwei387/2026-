@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Year Package - 丝巾 & 洗发水选择</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:"Microsoft YaHei",Arial,sans-serif;background:#cca983;min-height:100vh;padding:10px}
+    .container{max-width:600px;width:100%;margin:0 auto;background:white;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.3);overflow:hidden}
+    .header{background:linear-gradient(135deg,#9e0b0f 0%,#670000 100%);color:white;padding:40px 30px;text-align:center}
+    .header h1{font-size:48px;margin:0;font-weight:bold;letter-spacing:8px;text-transform:uppercase}
+    .header p{margin:12px 0 0 0;font-size:24px;letter-spacing:3px;font-weight:600}
+    .info-box{background:#ffe6e6;border-left:4px solid #9e0b0f;padding:15px;margin:20px;border-radius:6px}
+    .info-box p{margin:8px 0;font-size:16px;color:#000000;font-weight:500}
+    .info-box .highlight{color:#9e0b0f;font-weight:bold;font-size:18px}
+    .form-section{padding:30px}
+    .form-group{margin-bottom:25px}
+    label{display:block;font-weight:600;margin-bottom:10px;color:#9e0b0f;font-size:16px}
+    input,select{width:100%;padding:14px;border:2px solid #ddd;border-radius:10px;font-size:16px;background:white;transition:all 0.3s}
+    input:focus,select:focus{outline:none;border-color:#9e0b0f;box-shadow:0 0 8px rgba(158,11,15,0.6)}
+    .selection-section{border:3px solid #9e0b0f;border-radius:12px;padding:20px;background:#fff5f5;margin-bottom:20px}
+    .selection-section h3{color:#9e0b0f;margin-bottom:15px;font-size:20px;text-align:center;font-weight:bold}
+    .selection-grid{display:grid;gap:10px}
+    .selection-option{display:flex;align-items:center;background:white;padding:12px;border-radius:8px;border:2px solid #ddd;transition:all 0.3s}
+    .selection-option.selected{border-color:#9e0b0f;background:#ffe6e6;box-shadow:0 4px 12px rgba(158,11,15,0.3)}
+    .selection-option .option-label{margin:0;font-size:16px;flex:1;font-weight:500;color:#333}
+    .option-image{width:50px;height:50px;object-fit:cover;border-radius:8px;margin-right:12px;border:2px solid #9e0b0f;background:#f0f0f0}
+    .option-qty{padding:6px 8px;border:2px solid #ddd;border-radius:6px;font-size:14px;font-weight:bold;background:white;cursor:pointer;width:50px;text-align:center;transition:all 0.3s}
+    .option-qty:focus{outline:none;border-color:#9e0b0f;box-shadow:0 0 6px rgba(158,11,15,0.6)}
+    .submit-btn{width:100%;padding:18px;background:#9e0b0f;color:white;border:none;border-radius:10px;font-size:24px;font-weight:bold;cursor:pointer;transition:all 0.3s}
+    .submit-btn:hover{background:#670000;transform:translateY(-2px);box-shadow:0 6px 16px rgba(158,11,15,0.3)}
+    .submit-btn:disabled{background:#ccc;cursor:not-allowed;transform:none}
+    .check-btn{margin-top:10px;padding:12px;background:#28a745;color:white;border:none;border-radius:8px;cursor:pointer;width:100%;font-size:16px;font-weight:bold;transition:all 0.3s}
+    .check-btn:hover{background:#218838;transform:translateY(-2px);box-shadow:0 4px 12px rgba(40,167,69,0.3)}
+    .loading-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:9999;justify-content:center;align-items:center}
+    .loading-container{text-align:center}
+    .spinner{width:60px;height:60px;border:4px solid rgba(255,255,255,0.3);border-top:4px solid white;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}
+    .loading-text{color:white;font-size:20px;font-weight:bold}
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    .error-message{background:#fee;border:2px solid #f88;color:#c00;padding:15px;border-radius:8px;margin:20px 0;display:none}
+    .security-warning{background:#fff9e6;border-left:4px solid #9e0b0f;padding:12px 15px;margin:20px;border-radius:6px;font-size:15px}
+    .security-warning p{margin:6px 0;color:#333}
+    .section-divider{height:3px;background:linear-gradient(to right,transparent,#9e0b0f,transparent);margin:30px 0}
+  </style>
+</head>
+<body>
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <div class="loading-text">✨ 正在处理您的请求...</div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <h1>New Year Package</h1>
+      <p>丝巾 & 洗发水选择表单</p>
+    </div>
+
+    <div class="security-warning">
+      <p><strong>隐私保护：</strong></p>
+      <p>• 您提供的资料（邮箱、选择记录等）将被严格保密，不会对外公开或与第三方共享。</p>
+      <p>• 资料仅用于订单处理与产品配送，不作其他商业用途。</p>
+      <p>• 提交资料即表示您自愿提供并同意以上条款。</p>
+    </div>
+
+    <div class="info-box" id="customerInfo" style="display:none;">
+      <p>👤 <strong>姓名：</strong><span id="displayName"></span></p>
+      <p>📞 <strong>电话：</strong><span id="displayPhone"></span></p>
+      <p>📦 <strong>配套：</strong><span id="displaySet"></span></p>
+      <p class="highlight">🧴 请选择 <span id="displayShampooQty"></span> 瓶洗发水</p>
+      <p class="highlight">🧣 请选择 <span id="displayScarfQty"></span> 条丝巾</p>
+    </div>
+
+    <div class="form-section">
+      <div class="error-message" id="errorMessage"></div>
+      
+      <form id="selectionForm">
+        <div class="form-group">
+          <label>📧 电子邮箱 Email （请填写下单的Email） *</label>
+          <input type="email" id="email" required placeholder="your@email.com">
+          <button type="button" id="checkEmailBtn" class="check-btn">
+            ✓ 验证邮箱并加载订单
+          </button>
+        </div>
+
+        <div id="selectionContainer" style="display:none;">
+          <!-- Shampoo Selection (First) -->
+          <div class="selection-section">
+            <h3>🧴 New Year Package 赠送的洗发水款式</h3>
+            <div class="selection-grid" id="shampooGrid"></div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Scarf Selection (Second) -->
+          <div class="selection-section">
+            <h3>🧣 New Year Package 赠送的冰丝丝巾款式</h3>
+            <div class="selection-grid" id="scarfGrid"></div>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">确认提交</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let orderInfo = null;
+    let maxScarves = 0;
+    let maxShampoos = 0;
+
+    const scarfOptions = [
+      { name: '财富之光（冰丝）', image: 'https://lh3.googleusercontent.com/d/1GChEXSN5Mf8yabm7TvUh-UWx3ZMsWG0p' },
+      { name: '成就之光（冰丝）', image: 'https://lh3.googleusercontent.com/d/1hdzn5yMw7mLv0EUm67-_4q2lTmdP4Z9c' },
+      { name: '挚爱之光（冰丝）', image: 'https://lh3.googleusercontent.com/d/12YlxaNRSGn5inIhijfE6UnrwBUtYrsVx' },
+      { name: '丰盛满钞（冰丝）', image: 'https://lh3.googleusercontent.com/d/1bibLK0oQINwaop-jJeEiTHvVTUGUeRWy' },
+      { name: '生命之花（冰丝）', image: 'https://lh3.googleusercontent.com/d/1szujBgUcDoOu-77QchWcOOWu8JaFcIzG' },
+      { name: '财富版图（冰丝）', image: 'https://lh3.googleusercontent.com/d/19hgGBvMVu9PKqF5s9PPbn5ty8Q_7HgTD' },
+      { name: '财富版图（黑白款）（冰丝）', image: 'https://lh3.googleusercontent.com/d/18c8QDQPn83h6B2EtMgfzepRr0CdLDzqD' },
+      { name: '财富十二宫（冰丝）', image: 'https://lh3.googleusercontent.com/d/1eTA3tuGYy89avF_Co9mroYZfZE6uNfQs' }
+    ];
+
+    const shampooOptions = [
+      { name: '爆爽洗发水', image: 'https://lh3.googleusercontent.com/d/1A8S9f-06nFsbGKncp662BLOUiU3Yhkvr' },
+      { name: '爆顺洗发水', image: 'https://lh3.googleusercontent.com/d/1Jw-PXpObED7oxg2ggtvdlo08H3MJntjU' },
+      { name: '爆发洗发水', image: 'https://lh3.googleusercontent.com/d/1SceOlEfmMdQ2ZjI2h_T5Etxlkb9x04L9' }
+    ];
+
+    document.getElementById('checkEmailBtn').addEventListener('click', function() {
+      const email = document.getElementById('email').value;
+      if (!email) {
+        showError('请输入您的电子邮箱');
+        return;
+      }
+
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      loadingOverlay.style.display = 'flex';
+
+      google.script.run
+        .withSuccessHandler(function(completionStatus) {
+          if (completionStatus.completed) {
+            const resultUrl = window.location.href.split('?')[0] + '?action=view&email=' + encodeURIComponent(email);
+            window.location.href = resultUrl;
+          } else {
+            google.script.run
+              .withSuccessHandler(function(result) {
+                loadingOverlay.style.display = 'none';
+                if (result.success) {
+                  orderInfo = result;
+                  maxScarves = result.scarfQty;
+                  maxShampoos = result.shampooQty;
+                  document.getElementById('displayName').textContent = result.name;
+                  document.getElementById('displayPhone').textContent = result.phone || 'N/A';
+                  document.getElementById('displaySet').textContent = result.setType;
+                  document.getElementById('displayShampooQty').textContent = result.shampooQty;
+                  document.getElementById('displayScarfQty').textContent = result.scarfQty;
+                  document.getElementById('customerInfo').style.display = 'block';
+                  renderShampooOptions();
+                  renderScarfOptions();
+                  document.getElementById('selectionContainer').style.display = 'block';
+                  document.getElementById('checkEmailBtn').disabled = true;
+                  document.getElementById('email').disabled = true;
+                } else {
+                  showError(result.error || '无法找到您的订单信息');
+                }
+              })
+              .withFailureHandler(function(error) {
+                loadingOverlay.style.display = 'none';
+                showError('系统错误：' + error.message);
+              })
+              .getCustomerOrderInfo(email);
+          }
+        })
+        .withFailureHandler(function(error) {
+          loadingOverlay.style.display = 'none';
+          showError('系统错误：' + error.message);
+        })
+        .checkIfAlreadyCompleted(email);
+    });
+
+    function renderScarfOptions() {
+      const grid = document.getElementById('scarfGrid');
+      grid.innerHTML = '';
+
+      for (let i = 0; i < scarfOptions.length; i++) {
+        const item = scarfOptions[i];
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'selection-option';
+        
+        const img = document.createElement('img');
+        img.src = item.image;
+        img.className = 'option-image';
+        img.alt = item.name;
+        
+        img.onerror = function() {
+          this.style.display = 'none';
+        };
+        
+        const label = document.createElement('label');
+        label.className = 'option-label';
+        label.textContent = item.name;
+        
+        const select = document.createElement('select');
+        select.className = 'option-qty';
+        select.id = 'scarf' + i;
+        select.setAttribute('data-item', item.name);
+        select.setAttribute('data-type', 'scarf');
+        
+        for (let q = 0; q <= Math.min(9, maxScarves); q++) {
+          const option = document.createElement('option');
+          option.value = q;
+          option.textContent = q;
+          select.appendChild(option);
+        }
+        
+        select.addEventListener('change', function() {
+          updateSelection('scarf');
+        });
+        
+        optionDiv.appendChild(img);
+        optionDiv.appendChild(label);
+        optionDiv.appendChild(select);
+        grid.appendChild(optionDiv);
+      }
+      
+      updateSelection('scarf');
+    }
+
+    function renderShampooOptions() {
+      const grid = document.getElementById('shampooGrid');
+      grid.innerHTML = '';
+
+      for (let i = 0; i < shampooOptions.length; i++) {
+        const item = shampooOptions[i];
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'selection-option';
+        
+        const img = document.createElement('img');
+        img.src = item.image;
+        img.className = 'option-image';
+        img.alt = item.name;
+        
+        img.onerror = function() {
+          this.style.display = 'none';
+        };
+        
+        const label = document.createElement('label');
+        label.className = 'option-label';
+        label.textContent = item.name;
+        
+        const select = document.createElement('select');
+        select.className = 'option-qty';
+        select.id = 'shampoo' + i;
+        select.setAttribute('data-item', item.name);
+        select.setAttribute('data-type', 'shampoo');
+        
+        for (let q = 0; q <= Math.min(9, maxShampoos); q++) {
+          const option = document.createElement('option');
+          option.value = q;
+          option.textContent = q;
+          select.appendChild(option);
+        }
+        
+        select.addEventListener('change', function() {
+          updateSelection('shampoo');
+        });
+        
+        optionDiv.appendChild(img);
+        optionDiv.appendChild(label);
+        optionDiv.appendChild(select);
+        grid.appendChild(optionDiv);
+      }
+      
+      updateSelection('shampoo');
+    }
+
+    function updateSelection(type) {
+      const selects = document.querySelectorAll('.option-qty[data-type="' + type + '"]');
+      let totalSelected = 0;
+      const maxAllowed = type === 'scarf' ? maxScarves : maxShampoos;
+
+      selects.forEach(function(select) {
+        const qty = parseInt(select.value) || 0;
+        totalSelected += qty;
+      });
+
+      const remaining = maxAllowed - totalSelected;
+
+      selects.forEach(function(select) {
+        const currentQty = parseInt(select.value) || 0;
+        const selectOptions = select.querySelectorAll('option');
+        const parentDiv = select.closest('.selection-option');
+        
+        if (currentQty > 0) {
+          parentDiv.classList.add('selected');
+        } else {
+          parentDiv.classList.remove('selected');
+        }
+        
+        selectOptions.forEach(function(option) {
+          const optionValue = parseInt(option.value);
+          
+          if (optionValue === 0) {
+            option.disabled = false;
+          } else if (optionValue <= currentQty) {
+            option.disabled = false;
+          } else {
+            const needed = optionValue - currentQty;
+            option.disabled = needed > remaining;
+          }
+        });
+      });
+    }
+
+    function showError(message) {
+      const errorDiv = document.getElementById('errorMessage');
+      errorDiv.textContent = '❌ ' + message;
+      errorDiv.style.display = 'block';
+      setTimeout(function() {
+        errorDiv.style.display = 'none';
+      }, 5000);
+    }
+
+    document.getElementById('selectionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const scarfSelects = document.querySelectorAll('.option-qty[data-type="scarf"]');
+      const shampooSelects = document.querySelectorAll('.option-qty[data-type="shampoo"]');
+      
+      const selectedScarves = [];
+      let totalScarves = 0;
+
+      scarfSelects.forEach(function(select) {
+        const qty = parseInt(select.value) || 0;
+        const itemName = select.getAttribute('data-item');
+        if (qty > 0) {
+          for (let i = 0; i < qty; i++) {
+            selectedScarves.push(itemName);
+          }
+          totalScarves += qty;
+        }
+      });
+
+      const selectedShampoos = [];
+      let totalShampoos = 0;
+
+      shampooSelects.forEach(function(select) {
+        const qty = parseInt(select.value) || 0;
+        const itemName = select.getAttribute('data-item');
+        if (qty > 0) {
+          for (let i = 0; i < qty; i++) {
+            selectedShampoos.push(itemName);
+          }
+          totalShampoos += qty;
+        }
+      });
+
+      if (totalShampoos === 0) {
+        showError('请至少选择一瓶洗发水');
+        return;
+      }
+
+      if (totalShampoos !== maxShampoos) {
+        showError('您需要选择总共 ' + maxShampoos + ' 瓶洗发水（当前已选: ' + totalShampoos + '）');
+        return;
+      }
+
+      if (totalScarves === 0) {
+        showError('请至少选择一条丝巾');
+        return;
+      }
+
+      if (totalScarves !== maxScarves) {
+        showError('您需要选择总共 ' + maxScarves + ' 条丝巾（当前已选: ' + totalScarves + '）');
+        return;
+      }
+
+      const email = document.getElementById('email').value;
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      loadingOverlay.style.display = 'flex';
+
+      google.script.run
+        .withSuccessHandler(function(result) {
+          setTimeout(function() {
+            loadingOverlay.style.display = 'none';
+            if (result.success) {
+              window.location.href = result.resultLink;
+            } else {
+              showError(result.error || '提交失败');
+            }
+          }, 1000);
+        })
+        .withFailureHandler(function(error) {
+          loadingOverlay.style.display = 'none';
+          showError('提交失败：' + error.message);
+        })
+        .processScarfSelection({
+          email: email,
+          selectedScarves: selectedScarves,
+          selectedShampoos: selectedShampoos
+        });
+    });
+  </script>
+</body>
+</html>
