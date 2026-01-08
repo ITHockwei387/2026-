@@ -63,7 +63,8 @@ const SCARF_CONFIG = {
     '生命之花（冰丝）',
     '财富版图（冰丝）',
     '财富版图（黑白款）（冰丝）',
-    '财富十二宫（冰丝）'
+    '财富十二宫（冰丝）',
+    '满载而归（冰丝）(将在4月寄货）'
   ],
   
   SHAMPOO_OPTIONS: [
@@ -439,9 +440,10 @@ function createResultsPage(email, name, scarfSelection, shampooSelection, orderS
     '财富版图（冰丝）': 'https://lh3.googleusercontent.com/d/19hgGBvMVu9PKqF5s9PPbn5ty8Q_7HgTD',
     '财富版图（黑白款）（冰丝）': 'https://lh3.googleusercontent.com/d/18c8QDQPn83h6B2EtMgfzepRr0CdLDzqD',
     '财富十二宫（冰丝）': 'https://lh3.googleusercontent.com/d/1eTA3tuGYy89avF_Co9mroYZfZE6uNfQs',
-    '爆爽洗发水': 'https://lh3.googleusercontent.com/d/1A8S9f-06nFsbGKncp662BLOUiU3Yhkvr',
-    '爆顺洗发水': 'https://lh3.googleusercontent.com/d/1Jw-PXpObED7oxg2ggtvdlo08H3MJntjU',
-    '爆发洗发水': 'https://lh3.googleusercontent.com/d/1SceOlEfmMdQ2ZjI2h_T5Etxlkb9x04L9'
+    '满载而归（冰丝）(将在4月寄货）': 'https://lh3.googleusercontent.com/d/16tM9pyCeOFrw5r5SMtOEjFieLfu220Pu',
+    '爆爽洗发水': 'https://lh3.googleusercontent.com/d/1kYMfZLz0DQvMELTR0Az9eOCAeGlL_eon',
+    '爆顺洗发水': 'https://lh3.googleusercontent.com/d/1k-l6Zc0Ud6JtlIYemVx5eRKjjCNDQyvB',
+    '爆发洗发水': 'https://lh3.googleusercontent.com/d/13Tt7dRijyNWf2pM7OTY9C3Kst5T18IFw'
   };
   
   let scarvesHtml = '';
